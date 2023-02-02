@@ -22,6 +22,15 @@ YES= mixer.Sound("sounds/yes.ogg")
 YES.set_volume(0.7)
 INPUT= mixer.Sound("sounds/input.ogg")
 INPUT.set_volume(0.7)
+DICES= mixer.Sound("sounds/dices.ogg")
+OLE= mixer.Sound("sounds/ole.ogg")
+
+def hilo(espera, mensaje= None, sonido= None):
+	sleep(espera)
+	if mensaje:
+		print(mensaje)
+	elif sonido:
+		sonido.play()
 
 def verificar(coordenada):
 	coordenada= list(coordenada)
@@ -49,7 +58,7 @@ class Configuraciones():
 		while True:
 			cancion= input('¿Qué canción querés de fondo?: 1; waca waca. 2; among us. 3; miraculous')
 			if not self.verify(cancion): continue
-			print(f"perfecto. Seleccionaste {canciones[cancion][0]} como música de fondo.")
+			print(f"perfecto. Seleccionaste {canciones[cancion][0]} como la música de fondo.")
 			self.tema= canciones[cancion][1]
 			REGISTER.play()
 			print("Ahora vamos con los casilleros:")
@@ -148,6 +157,8 @@ input("intro para continuar")
 jugadores= [jugador_1, jugador_2]
 print('Y el jugador que va a comenzar es...')
 sleep(2)
+DICES.play()
+sleep(1.5)
 aleatorio= randint(0,1)
 print(f'¡{jugadores[aleatorio].nombre}!')
 sleep(1)
@@ -161,9 +172,9 @@ input('¡Que comience el juego! Pulsá intro para iniciar la partida')
 
 def winner():
 	while True:
-		sleep(5)
+		sleep(7)
 		print(f"¡{j1.nombre}! victoria! ¡victoria! ¡victoria!")
-		sleep(5)
+		sleep(7)
 		print(f"¡Felicitaciones {j1.nombre}!")
 
 def finish():
@@ -185,8 +196,8 @@ def disparar(coordenada):
 			BLUM.play()
 			if len(j2.barcos) == 1:
 				NO.play()
+				Thread(target=hilo, args=(4, f"¡Jaque mate! {j2.nombre} tiene solo un barco en su flota...", None), daemon= True).start()
 				sleep(BLUM.get_length()-5)
-				print(f"¡Jaque mate! {j2.nombre} tiene solo un barco en su flota...")
 			else:
 				YES.play()
 				sleep(BLUM.get_length()-5)
@@ -195,6 +206,7 @@ def disparar(coordenada):
 			finish()
 	else:
 		WATER.play()
+		OLE.play()
 		j2.restantes.remove(coordenada)
 		sleep(WATER.get_length()-2)
 		return False
@@ -203,7 +215,7 @@ def estadoActual(op):
 	mixer.music.pause()
 	if op == 1:
 		print(f'{j1.nombre} tiene {len(j1.barcos)} en su flota.')
-		print(f'{j2.nombre} tiene {len(j2.barcos)} en su flota')
+		print(f'{j2.nombre} tiene {len(j2.barcos)} barcos en su flota')
 	else:
 		print(f"{j2.nombre} tiene disponibles las siguientes casillas; {'. '.join(j2.restantes)}")
 	input("pulsá intro para continuar el juego")
