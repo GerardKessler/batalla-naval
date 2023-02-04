@@ -18,12 +18,12 @@ WHISTLE= mixer.Sound("sounds/whistle.ogg")
 REGISTER.set_volume(0.7)
 WINNER= mixer.Sound("sounds/winner.ogg")
 NO= mixer.Sound("sounds/no.ogg")
-YES= mixer.Sound("sounds/yes.ogg")
-YES.set_volume(0.7)
 INPUT= mixer.Sound("sounds/input.ogg")
 INPUT.set_volume(0.7)
 DICES= mixer.Sound("sounds/dices.ogg")
 OLE= mixer.Sound("sounds/ole.ogg")
+SIRENA= mixer.Sound("sounds/sirena.ogg")
+NO_FINISH= mixer.Sound("sounds/no_finish.ogg")
 
 def hilo(espera, mensaje= None, sonido= None):
 	sleep(espera)
@@ -51,7 +51,7 @@ class Configuraciones():
 
 	def main(self):
 		canciones= {"1": ["Waka Waka", "sounds/waka-waka.ogg"], "2": ["Among us", "sounds/among-us.ogg"], "3": ["Miráculus", "sounds/miraculous.ogg"]}
-		casilleros= {"1": "abcdef", "2": "abcdefgh", "3": "abcdefghij"}
+		casilleros= {"1": "abcde", "2": "abcdef", "3": "abcdefg"}
 		barcos= {"1": 3, "2": 4, "3": 5}
 		os.system("color 2")
 		print('Hola. En primer lugar configuremos un poco esto.')
@@ -64,7 +64,8 @@ class Configuraciones():
 			print("Ahora vamos con los casilleros:")
 			break
 		while True:
-			casilleros_usuario= input("1, 6 casilleros. 2, 8 casilleros. 3, 10 casilleros")
+			message= f'1, {len(casilleros["1"])} casilleros. 2, {len(casilleros["2"])} casilleros. 3, {len(casilleros["3"])} casilleros'
+			casilleros_usuario= input(message)
 			if not self.verify(casilleros_usuario): continue
 			self.casilleros= casilleros[casilleros_usuario]
 			REGISTER.play()
@@ -179,8 +180,11 @@ def winner():
 
 def finish():
 	mixer.music.stop()
-	YES.play()
-	sleep(3)
+	SIRENA.play()
+	sleep(2.5)
+	NO_FINISH.play()
+	sleep(2)
+	BLUM.play()
 	WINNER.play()
 	Thread(target=winner, daemon= True).start()
 	sleep(WINNER.get_length())
@@ -199,7 +203,6 @@ def disparar(coordenada):
 				Thread(target=hilo, args=(4, f"¡Jaque mate! {j2.nombre} tiene solo un barco en su flota...", None), daemon= True).start()
 				sleep(BLUM.get_length()-5)
 			else:
-				YES.play()
 				sleep(BLUM.get_length()-5)
 			return True
 		else:
@@ -217,7 +220,7 @@ def estadoActual(op):
 		print(f'{j1.nombre} tiene {len(j1.barcos)} en su flota.')
 		print(f'{j2.nombre} tiene {len(j2.barcos)} barcos en su flota')
 	else:
-		print(f"{j2.nombre} tiene disponibles las siguientes casillas; {'. '.join(j2.restantes)}")
+		print('. '.join(j2.restantes))
 	input("pulsá intro para continuar el juego")
 	mixer.music.unpause()
 
