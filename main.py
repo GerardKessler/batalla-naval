@@ -50,8 +50,8 @@ class Configuraciones():
 		self.main()
 
 	def main(self):
-		canciones= {"1": ["Waka Waka", "sounds/waka-waka.ogg"], "2": ["Among us", "sounds/among-us.ogg"], "3": ["Miráculus", "sounds/miraculous.ogg"]}
-		casilleros= {"1": "abcde", "2": "abcdef", "3": "abcdefg"}
+		canciones= {"1": ["Waka Waka", "sounds/waka-waka.ogg"], "2": ["Among us", "sounds/among-us-rm.ogg"], "3": ["Miráculus", "sounds/miraculous.ogg"]}
+		casilleros= {"1": "abcd", "2": "abcde", "3": "abcdef"}
 		barcos= {"1": 3, "2": 4, "3": 5}
 		os.system("color 2")
 		print('Hola. En primer lugar configuremos un poco esto.')
